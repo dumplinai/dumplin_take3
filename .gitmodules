@@ -1,0 +1,9 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/dumplinai/backend.git
+[submodule "post_pipeline"]
+	path = post_pipeline
+	url = https://github.com/dumplinai/post_pipeline.git
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/dumplinai/frontend.git
