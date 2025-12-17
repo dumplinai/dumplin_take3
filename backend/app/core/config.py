@@ -20,7 +20,8 @@ class Settings(BaseSettings):
     API_KEY: Optional[str] = None
 
     # RevenueCat Configuration
-    REVENUECAT_WEBHOOK_SECRET: Optional[str] = None
+    REVENUECAT_API_KEY: Optional[str] = None  # Secret API key for server-side calls
+    REVENUECAT_WEBHOOK_SECRET: Optional[str] = None  # Webhook signing secret
 
     # Subscription Configuration
     FREE_TIER_WEEKLY_MESSAGE_LIMIT: int = 20
