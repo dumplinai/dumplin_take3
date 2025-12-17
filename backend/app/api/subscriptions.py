@@ -64,6 +64,7 @@ def verify_webhook_signature(payload: bytes, signature: str) -> bool:
 @router.post("/webhooks/revenuecat")
 async def receive_revenuecat_webhook(
     request: Request,
+    authorization: Optional[str] = Header(None),
     x_revenuecat_signature: Optional[str] = Header(None, alias="X-RevenueCat-Signature"),
 ):
     """
@@ -80,10 +81,17 @@ async def receive_revenuecat_webhook(
     - BILLING_ISSUE: Payment failed
     - SUBSCRIBER_ALIAS: User ID aliasing
     """
+    # Verify Authorization header (using API_KEY as Bearer token)
+    if settings.API_KEY:
+        expected_auth = f"Bearer {settings.API_KEY}"
+        if not authorization or authorization != expected_auth:
+            logger.warning("Invalid webhook authorization header")
+            raise HTTPException(status_code=401, detail="Invalid authorization")
+
     # Get raw body for signature verification
     body = await request.body()
 
-    # Verify signature if configured
+    # Verify signature if configured (additional security layer)
     if settings.REVENUECAT_WEBHOOK_SECRET and x_revenuecat_signature:
         if not verify_webhook_signature(body, x_revenuecat_signature):
             logger.warning("Invalid webhook signature")
